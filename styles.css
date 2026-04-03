@@ -2,6 +2,10 @@ html {
     font-family: Arial;
 }
 
+body {
+    margin: 0;
+}
+
 #textlogo{
     font-weight: bold;
     color: red;
@@ -10,5 +14,8 @@ html {
 
 header {
     background-color: azure;
-    margin-top: -1.2%;
+}
+
+header p {
+    margin: 0;
 }
