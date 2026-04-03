@@ -1,0 +1,14 @@
+html {
+    font-family: Arial;
+}
+
+#textlogo{
+    font-weight: bold;
+    color: red;
+    font-size: 130%;
+}
+
+header {
+    background-color: azure;
+    margin-top: -1.2%;
+}
