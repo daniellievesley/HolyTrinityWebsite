@@ -58,8 +58,8 @@ async function renderAuthState(user) {
     signedIn.style.display = 'none';
     signedOut.style.display = 'block';
     if (editorArea) editorArea.style.display = 'none';
-    // Show auth div so user can sign in
     authDiv.style.display = 'block';
+    if (authStatus) authStatus.textContent = 'Sign in with the publisher account.';
     return;
   }
 
@@ -78,13 +78,13 @@ async function renderAuthState(user) {
   }
 
   if (!isPublisher) {
-    if (authStatus) authStatus.textContent = 'This Google account is not approved for editing.';
-    authDiv.style.display = 'none';
+    if (authStatus) authStatus.textContent = 'This account does not have the publisher claim. Sign out and use the admin Google account that was assigned the claim.';
+    authDiv.style.display = 'block';
+    if (editorArea) editorArea.style.display = 'none';
     await signOut(auth);
     return;
   }
 
-  // User is publisher - show everything
   authDiv.style.display = 'block';
   if (editorArea) editorArea.style.display = 'block';
   if (authStatus) authStatus.textContent = 'Signed in as publisher.';
