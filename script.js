@@ -189,12 +189,26 @@ async function loadNews() {
       const date = d.createdAt && d.createdAt.toDate ? d.createdAt.toDate().toLocaleDateString() : '';
       const section = document.createElement('section');
       section.className = 'news-item';
+      const shortContent = (d.content || '').slice(0, 300);
+      const needsReadMore = (d.content || '').length > 300;
       section.innerHTML = `
         <p class="contentTitle">${escapeHtml(d.title || '')}</p>
         <p class="news-date">${escapeHtml(date)}</p>
-        <div class="news-body">${escapeHtml(d.content || '')}</div>
+        <div class="news-body">${escapeHtml(needsReadMore ? shortContent + '...' : (d.content || ''))}</div>
         ${d.imageUrl ? `<div class="news-image"><img src="${d.imageUrl}" alt="${escapeHtml(d.title||'news image')}"></div>` : ''}
       `;
+      if (needsReadMore) {
+        const btn = document.createElement('button');
+        btn.type = 'button';
+        btn.className = 'read-more';
+        btn.textContent = 'Read more';
+        btn.addEventListener('click', ()=>{
+          const body = section.querySelector('.news-body');
+          if (body) body.textContent = d.content || '';
+          btn.remove();
+        });
+        section.appendChild(btn);
+      }
       container.appendChild(section);
     });
   } catch (err) {
