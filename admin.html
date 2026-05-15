@@ -21,16 +21,20 @@
         </nav>
     </header>
     <main>
-        <h1> News </h1>
-        <p> This page is coming soon. </p>
+        <h1> Admin </h1>
+        <p> Sign in with your credentials. </p>
 
-        <div class="gallery">
-            <section>
-                <p class="contentTitle"> This is the news. </p>
-                <p> Friday, 15th May 2026 </p>
-                <p> News post. </p>
-            </section>
-        </div>
+        <div id="auth">
+  <div id="signedOut">
+    <button id="signInBtn">Sign in with Google</button>
+  </div>
+  <div id="signedIn" style="display:none">
+    <img id="userPhoto" style="width:40px; border-radius:50%;">
+    <span id="who"></span>
+    <button id="signOutBtn">Sign out</button>
+  </div>
+  <p id="authStatus"></p>
+</div>
 
     </main>
 
