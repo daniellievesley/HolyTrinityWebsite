@@ -1,8 +1,8 @@
 html {
-    font-family: Arial;
+    font-family: 'Inter';
 }
 
-html p, html h1{
+main{
     padding-left: 2%;
 }
 
@@ -23,6 +23,8 @@ header {
     align-items: center;
     padding-top: 1%;
     padding-bottom: 1%;
+    font-family: 'Lora';
+    padding-left: 2%;
 }
 
 nav{
@@ -30,6 +32,8 @@ nav{
     display: flex;
     justify-content: flex-end;
     flex-shrink: 0;
+    font-family: 'Inter';
+    padding-right: 2%;
 }
 
 nav p {
