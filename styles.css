@@ -4,6 +4,7 @@ html {
 
 main{
     padding-left: 2%;
+    padding-right: 2%;
 }
 
 body {
@@ -46,3 +47,39 @@ header p {
     padding-top: 0.5%;
     padding-bottom: 0.2%;
 }
+
+  .tile {
+    flex: 1;             /* Makes both tiles equal width */
+    height: 200px;
+    background:  #a6d6e9;
+    border: 2px solid #c4f7c1;
+    border-radius: 8px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-direction: column;
+  }
+
+  #services {
+    display: flex;       /* Aligns items side-by-side */
+    gap: 20px;           /* Adds space between tiles */
+  }
+
+  footer {
+    padding: 2%;
+    background-color: #000000;
+    justify-content: space-between;
+    color: white;
+    display: flex;
+    gap: 20px;
+    align-items: flex-start;
+  }
+  
+  footer a:link, a:visited {
+    color: white;
+    text-decoration: none;
+  }
+  
+  main {
+    margin-bottom: 2%;
+  }
