@@ -38,27 +38,78 @@ export const storage = getStorage(app);
 export const provider = new GoogleAuthProvider();
 
 
+async function getUserClaims(user) {
+  const result = await getIdTokenResult(user, true);
+  return result.claims || {};
+}
+
+async function renderAuthState(user) {
+  const authDiv = document.getElementById('auth');
+  const signedIn = document.getElementById('signedIn');
+  const signedOut = document.getElementById('signedOut');
+  const who = document.getElementById('who');
+  const userPhoto = document.getElementById('userPhoto');
+  const editorArea = document.getElementById('editorArea');
+  const authStatus = document.getElementById('authStatus');
+
+  if (!signedIn || !signedOut || !authDiv) return;
+
+  if (!user) {
+    signedIn.style.display = 'none';
+    signedOut.style.display = 'block';
+    if (editorArea) editorArea.style.display = 'none';
+    // Show auth div so user can sign in
+    authDiv.style.display = 'block';
+    return;
+  }
+
+  const claims = await getUserClaims(user);
+  const isPublisher = claims.publisher === true;
+
+  signedIn.style.display = 'block';
+  signedOut.style.display = 'none';
+
+  if (who) {
+    who.textContent = user.displayName || user.email || '';
+  }
+
+  if (userPhoto && user.photoURL) {
+    userPhoto.src = user.photoURL;
+  }
+
+  if (!isPublisher) {
+    if (authStatus) authStatus.textContent = 'This Google account is not approved for editing.';
+    authDiv.style.display = 'none';
+    await signOut(auth);
+    return;
+  }
+
+  // User is publisher - show everything
+  authDiv.style.display = 'block';
+  if (editorArea) editorArea.style.display = 'block';
+  if (authStatus) authStatus.textContent = 'Signed in as publisher.';
+}
+
 document.getElementById('signInBtn').addEventListener('click', async ()=>{
   const status = document.getElementById('authStatus');
   status.textContent = 'Opening Google sign-in...';
   try {
     await signInWithPopup(auth, provider);
-    status.textContent = 'Signed in successfully.';
+    const user = auth.currentUser;
+    if (user) {
+      await renderAuthState(user);
+    }
   } catch (error) {
     console.error(error);
     status.textContent = `Sign-in failed: ${error.code || ''} ${error.message || error}`.trim();
   }
 });
+
 document.getElementById('signOutBtn').addEventListener('click', async ()=>{
   await signOut(auth);
   document.getElementById('authStatus').textContent = 'Signed out.';
 });
 
-onAuthStateChanged(auth, user=>{
-  document.getElementById('signedIn').style.display = user ? 'block' : 'none';
-  document.getElementById('signedOut').style.display = user ? 'none' : 'block';
-  if (user){
-    document.getElementById('who').textContent = user.displayName || user.email;
-    if (user.photoURL) document.getElementById('userPhoto').src = user.photoURL;
-  }
+onAuthStateChanged(auth, async user=>{
+  await renderAuthState(user);
 });
