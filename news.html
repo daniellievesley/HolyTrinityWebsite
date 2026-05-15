@@ -31,6 +31,19 @@
                 <p> News post. </p>
             </section>
         </div>
+
+        <div id="auth">
+  <div id="signedOut">
+    <button id="signInBtn">Sign in with Google</button>
+  </div>
+  <div id="signedIn" style="display:none">
+    <img id="userPhoto" style="width:40px; border-radius:50%;">
+    <span id="who"></span>
+    <button id="signOutBtn">Sign out</button>
+  </div>
+  <p id="authStatus"></p>
+</div>
+
     </main>
 
     <footer>
@@ -51,6 +64,6 @@
             <p> CO13 0AU </p>
         </div>
     </footer>
-<script src="script.js" defer></script>
+<script type="module" src="script.js"></script>
 </body>
 </html>
