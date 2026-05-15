@@ -214,3 +214,61 @@ header p {
     display: flex;
     gap: 1em;
   }
+
+  #userpanel{
+    text-align: center;
+  }
+
+  .user-row{
+    display: inline-flex;
+    align-items: center;
+    gap: 0.6rem;
+  }
+
+  #userPhoto {
+    width:40px;
+    height:40px;
+    border-radius:50%;
+    object-fit:cover; 
+  }
+
+  #newsForm {
+  max-width: 720px;
+  margin: 0.75rem auto;
+  box-sizing: border-box;
+}
+
+#newsForm label {
+  display: block;
+  font-weight: 600;
+  margin: 0 0 0.35rem;
+}
+
+#newsForm input[type="text"],
+#newsForm textarea {
+  width: 100%;
+  padding: 10px 12px;
+  border: 1px solid #ddd;
+  border-radius: 8px;
+  font-size: 1rem;
+  box-sizing: border-box;
+  background: #fff;
+}
+
+#newsForm textarea { min-height: 140px; resize: vertical; }
+
+#newsForm button {
+  display: block;
+  margin: 0.75rem auto 0;
+  padding: 8px 14px;
+  border-radius: 8px;
+  background: #2b6cb0;
+  color: #fff;
+  border: none;
+  cursor: pointer;
+}
+
+@media (max-width: 520px) {
+  #newsForm { padding: 0 12px; }
+  #newsForm button { width: 100%; }
+}

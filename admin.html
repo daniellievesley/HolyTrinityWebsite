@@ -22,16 +22,21 @@
     </header>
     <main>
         <h1> Admin </h1>
-        <p> Sign in to access editor features. </p>
+        <p> Access editor features. </p>
 
         <div id="auth" style="display:none">
             <div id="signedOut">
                 <button id="signInBtn">Sign in with Google</button>
             </div>
             <div id="signedIn" style="display:none">
+                <div id='userpanel'> 
+                <div class="user-row">
                 <img id="userPhoto" alt="Signed in user photo" style="width:40px; border-radius:50%;">
                 <span id="who"></span>
+                </div>
                 <button id="signOutBtn">Sign out</button>
+                </div>
+                </div>
             </div>
             <p id="authStatus"></p>
             <div id="editorArea" style="display:none">
