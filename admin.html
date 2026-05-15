@@ -22,19 +22,30 @@
     </header>
     <main>
         <h1> Admin </h1>
-        <p> Sign in with your credentials. </p>
+        <p> Sign in to access editor features. </p>
 
-        <div id="auth">
-  <div id="signedOut">
-    <button id="signInBtn">Sign in with Google</button>
-  </div>
-  <div id="signedIn" style="display:none">
-    <img id="userPhoto" style="width:40px; border-radius:50%;">
-    <span id="who"></span>
-    <button id="signOutBtn">Sign out</button>
-  </div>
-  <p id="authStatus"></p>
-</div>
+        <div id="auth" style="display:none">
+            <div id="signedOut">
+                <button id="signInBtn">Sign in with Google</button>
+            </div>
+            <div id="signedIn" style="display:none">
+                <img id="userPhoto" alt="Signed in user photo" style="width:40px; border-radius:50%;">
+                <span id="who"></span>
+                <button id="signOutBtn">Sign out</button>
+            </div>
+            <p id="authStatus"></p>
+            <div id="editorArea" style="display:none">
+                <h2>News editor</h2>
+                <form id="newsForm">
+                    <label for="newsTitle">Title:</label>
+                    <input type="text" id="newsTitle" required>
+                    <label for="newsContent">Content:</label>
+                    <textarea id="newsContent" rows="5" required></textarea>
+                    <button type="submit">Publish News</button>
+                </form>
+                <p id="newsFormStatus"></p>
+            </div>
+        </div>
 
     </main>
 
