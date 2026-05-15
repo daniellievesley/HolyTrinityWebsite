@@ -90,25 +90,34 @@ async function renderAuthState(user) {
   if (authStatus) authStatus.textContent = 'Signed in as publisher.';
 }
 
-document.getElementById('signInBtn').addEventListener('click', async ()=>{
-  const status = document.getElementById('authStatus');
-  status.textContent = 'Opening Google sign-in...';
-  try {
-    await signInWithPopup(auth, provider);
-    const user = auth.currentUser;
-    if (user) {
-      await renderAuthState(user);
+(function(){
+  const signInBtn = document.getElementById('signInBtn');
+  if (!signInBtn) return;
+  signInBtn.addEventListener('click', async ()=>{
+    const status = document.getElementById('authStatus');
+    if (status) status.textContent = 'Opening Google sign-in...';
+    try {
+      await signInWithPopup(auth, provider);
+      const user = auth.currentUser;
+      if (user) {
+        await renderAuthState(user);
+      }
+    } catch (error) {
+      console.error(error);
+      if (status) status.textContent = `Sign-in failed: ${error.code || ''} ${error.message || error}`.trim();
     }
-  } catch (error) {
-    console.error(error);
-    status.textContent = `Sign-in failed: ${error.code || ''} ${error.message || error}`.trim();
-  }
-});
+  });
+})();
 
-document.getElementById('signOutBtn').addEventListener('click', async ()=>{
-  await signOut(auth);
-  document.getElementById('authStatus').textContent = 'Signed out.';
-});
+(function(){
+  const signOutBtn = document.getElementById('signOutBtn');
+  if (!signOutBtn) return;
+  signOutBtn.addEventListener('click', async ()=>{
+    await signOut(auth);
+    const status = document.getElementById('authStatus');
+    if (status) status.textContent = 'Signed out.';
+  });
+})();
 
 // Handle news form submission
 const newsForm = document.getElementById('newsForm');
