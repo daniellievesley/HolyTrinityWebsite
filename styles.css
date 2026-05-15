@@ -125,7 +125,7 @@ header p {
   .tile {
     flex: 1;             /* Makes both tiles equal width */
     height: 200px;
-    background:  #000000;
+    background:  #6e6b6b;
     color: white;
     border: 2px solid red;
     border-radius: 8px;
