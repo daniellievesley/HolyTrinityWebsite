@@ -167,3 +167,41 @@ if (newsForm) {
 onAuthStateChanged(auth, async user=>{
   await renderAuthState(user);
 });
+
+// Helper to avoid simple XSS
+function escapeHtml(s){ return (s||'').replaceAll('&','&amp;').replaceAll('<','&lt;').replaceAll('>','&gt;'); }
+
+async function loadNews() {
+  const container = document.getElementById('newsGallery') || document.querySelector('.gallery');
+  if (!container) return;
+  container.innerHTML = '';
+
+  try {
+    const q = query(collection(db, 'news'), where('published','==', true), orderBy('createdAt','desc'));
+    const snap = await getDocs(q);
+    if (snap.empty) {
+      container.innerHTML = '<p>No news yet.</p>';
+      return;
+    }
+
+    snap.forEach(doc => {
+      const d = doc.data();
+      const date = d.createdAt && d.createdAt.toDate ? d.createdAt.toDate().toLocaleDateString() : '';
+      const section = document.createElement('section');
+      section.className = 'news-item';
+      section.innerHTML = `
+        <p class="contentTitle">${escapeHtml(d.title || '')}</p>
+        <p class="news-date">${escapeHtml(date)}</p>
+        <div class="news-body">${escapeHtml(d.content || '')}</div>
+        ${d.imageUrl ? `<div class="news-image"><img src="${d.imageUrl}" alt="${escapeHtml(d.title||'news image')}"></div>` : ''}
+      `;
+      container.appendChild(section);
+    });
+  } catch (err) {
+    console.error('loadNews error', err);
+    container.innerHTML = '<p>Error loading news.</p>';
+  }
+}
+
+// run on pages that have the gallery
+loadNews();
