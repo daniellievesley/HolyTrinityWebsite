@@ -204,3 +204,13 @@ header p {
   #locationDetails {
     flex: 2;
   }
+
+  .videoTitle{
+    font-size: 150%;
+    font-weight: bold;
+  }
+
+  .videogallery{
+    display: flex;
+    gap: 1em;
+  }
