@@ -44,7 +44,22 @@
             <p id="authStatus"></p>
             <div id="editorArea" style="display:none">
                 <h2>News editor</h2>
-                <p>You are approved to edit news posts.</p>
+                <form id="newsForm">
+                    <div>
+                        <label for="newsTitle">Title:</label>
+                        <input type="text" id="newsTitle" required>
+                    </div>
+                    <div>
+                        <label for="newsContent">Content:</label>
+                        <textarea id="newsContent" rows="5" required></textarea>
+                    </div>
+                    <div>
+                        <label for="newsImage">Image:</label>
+                        <input type="file" id="newsImage" accept="image/*">
+                    </div>
+                    <button type="submit">Publish News</button>
+                </form>
+                <p id="newsFormStatus"></p>
             </div>
         </div>
 

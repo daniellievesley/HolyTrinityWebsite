@@ -110,6 +110,60 @@ document.getElementById('signOutBtn').addEventListener('click', async ()=>{
   document.getElementById('authStatus').textContent = 'Signed out.';
 });
 
+// Handle news form submission
+const newsForm = document.getElementById('newsForm');
+const newsFormStatus = document.getElementById('newsFormStatus');
+
+if (newsForm) {
+  newsForm.addEventListener('submit', async (e) => {
+    e.preventDefault();
+    
+    const title = document.getElementById('newsTitle').value;
+    const content = document.getElementById('newsContent').value;
+    const imageFile = document.getElementById('newsImage').files[0];
+    
+    if (!title || !content) {
+      newsFormStatus.textContent = 'Title and content are required.';
+      return;
+    }
+    
+    newsFormStatus.textContent = 'Publishing...';
+    
+    try {
+      let imageUrl = null;
+      
+      // Upload image if provided
+      if (imageFile) {
+        const storageRef = ref(storage, `news-images/${Date.now()}_${imageFile.name}`);
+        const snapshot = await uploadBytes(storageRef, imageFile);
+        imageUrl = await getDownloadURL(snapshot.ref);
+      }
+      
+      // Create news document in Firestore
+      await addDoc(collection(db, 'news'), {
+        title,
+        content,
+        imageUrl,
+        authorEmail: auth.currentUser.email,
+        createdAt: serverTimestamp(),
+        published: true
+      });
+      
+      // Clear form
+      newsForm.reset();
+      newsFormStatus.textContent = 'News published successfully!';
+      
+      setTimeout(() => {
+        newsFormStatus.textContent = '';
+      }, 3000);
+      
+    } catch (error) {
+      console.error('Publish error:', error);
+      newsFormStatus.textContent = `Error: ${error.message}`;
+    }
+  });
+}
+
 onAuthStateChanged(auth, async user=>{
   await renderAuthState(user);
 });
