@@ -205,12 +205,12 @@ header p {
     flex: 2;
   }
 
-  .videoTitle{
+  .contentTitle{
     font-size: 150%;
     font-weight: bold;
   }
 
-  .videogallery{
+  .gallery{
     display: flex;
     gap: 1em;
   }
