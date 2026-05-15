@@ -222,7 +222,7 @@ header p {
   .user-row{
     display: inline-flex;
     align-items: center;
-    gap: 2em;
+    gap: 0.6em;
   }
 
   #userPhoto {
