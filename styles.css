@@ -276,3 +276,7 @@ header p {
 button {
   cursor: pointer;
 }
+
+.gallery #news-gallery .news-item{
+  flex: 1;
+}
