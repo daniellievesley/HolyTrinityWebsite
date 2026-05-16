@@ -232,3 +232,46 @@ if (menuToggle && navMenu) {
 } else if (menuToggle) {
   menuToggle.style.display = 'none';
 }
+
+
+// --- Cookie consent and YouTube click-to-load ---
+(function(){
+  const ytContainer = document.getElementById('ytContainer');
+  const ytLoadBtn = document.getElementById('ytLoadBtn');
+  const banner = document.getElementById('cookieBanner');
+  const acceptBtn = document.getElementById('acceptCookies');
+  const rejectBtn = document.getElementById('rejectCookies');
+
+  function getConsent(){
+    try{ return JSON.parse(localStorage.getItem('cookieConsent')||'{}'); }catch(e){return{}}
+  }
+  function saveConsent(obj){ localStorage.setItem('cookieConsent', JSON.stringify(obj)); }
+
+  function loadYouTube(){
+    if (!ytContainer) return;
+    if (ytContainer.dataset.loaded) return;
+    const src = ytContainer.dataset.src;
+    const iframe = document.createElement('iframe');
+    iframe.width = '560'; iframe.height = '315';
+    iframe.src = src; iframe.frameBorder = '0'; iframe.allow = 'accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture';
+    iframe.allowFullscreen = true;
+    ytContainer.innerHTML = '';
+    ytContainer.appendChild(iframe);
+    ytContainer.dataset.loaded = '1';
+  }
+
+  function showBanner(){ if (banner) banner.style.display = 'flex'; }
+  function hideBanner(){ if (banner) banner.style.display = 'none'; }
+
+  document.addEventListener('DOMContentLoaded', ()=>{
+    const consent = getConsent();
+    if (ytContainer && consent.youtube){ loadYouTube(); }
+    // if no decision and the page has ytContainer, prompt
+    if (ytContainer && (consent.youtube===undefined)) showBanner();
+  });
+
+  if (ytLoadBtn) ytLoadBtn.addEventListener('click', ()=>{ saveConsent({youtube:true}); loadYouTube(); hideBanner(); });
+  if (acceptBtn) acceptBtn.addEventListener('click', ()=>{ saveConsent({youtube:true}); loadYouTube(); hideBanner(); });
+  if (rejectBtn) rejectBtn.addEventListener('click', ()=>{ saveConsent({youtube:false}); hideBanner(); });
+})();
+// --- end cookie consent ---

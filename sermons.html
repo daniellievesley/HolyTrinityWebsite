@@ -27,10 +27,9 @@
 
         <h2> 📹 We are on YouTube! </h2>
         <p> Take a look at our latest sermon by playing the video below. Alternatively, you can access our YouTube channel, for our full set of sermons. </p>
-        <iframe width="560" height="315"
-        src="https://www.youtube.com/embed/videoseries?list=UUBwejc-awS-mANgrkHQ5-6A"
-        frameborder="0" allowfullscreen>
-        </iframe>
+        <div id="ytContainer" data-src="https://www.youtube.com/embed/videoseries?list=UUBwejc-awS-mANgrkHQ5-6A">
+            <button id="ytLoadBtn">Load YouTube video</button>
+        </div>
     </main>
 
     <footer>
@@ -52,6 +51,17 @@
             <p> CO13 0AU </p>
         </div>
     </footer>
+
+    <div id="cookieBanner" style="position:fixed;left:1rem;right:1rem;bottom:1rem;background:#fff;padding:1rem;border:1px solid #ccc;border-radius:8px;box-shadow:0 4px 12px rgba(0,0,0,0.08);z-index:1200;display:none;align-items:center;gap:1rem;">
+        <div style="flex:1">This site embeds YouTube videos which may set third‑party cookies. Allow loading YouTube?
+            <div style="font-size:0.9rem;color:#666;margin-top:0.25rem">You can accept to load videos now, or decline to keep them blocked.</div>
+        </div>
+        <div style="display:flex;gap:0.5rem">
+            <button id="acceptCookies" style="background:#0069d9;color:#fff;border:none;padding:0.5rem 0.75rem;border-radius:6px">Accept</button>
+            <button id="rejectCookies" style="background:#eee;border:none;padding:0.5rem 0.75rem;border-radius:6px">Reject</button>
+        </div>
+    </div>
+
 <script type="module" src="script.js"></script>
 </body>
 </html>
