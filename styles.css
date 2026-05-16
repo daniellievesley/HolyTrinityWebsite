@@ -272,3 +272,7 @@ header p {
   #newsForm { padding: 0 12px; }
   #newsForm button { width: 100%; }
 }
+
+button {
+  cursor: pointer;
+}
