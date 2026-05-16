@@ -20,7 +20,6 @@ function gotoCOFECSite() {
 import { initializeApp } from "https://www.gstatic.com/firebasejs/9.22.1/firebase-app.js";
 import { getAuth, getIdTokenResult, onAuthStateChanged, signInWithPopup, GoogleAuthProvider, signOut } from "https://www.gstatic.com/firebasejs/9.22.1/firebase-auth.js";
 import { getFirestore, collection, addDoc, serverTimestamp, query, where, getDocs, orderBy, updateDoc, doc } from "https://www.gstatic.com/firebasejs/9.22.1/firebase-firestore.js";
-import { getStorage, ref, uploadBytes, getDownloadURL } from "https://www.gstatic.com/firebasejs/9.22.1/firebase-storage.js";
 
 const firebaseConfig = {
   apiKey: "AIzaSyBK5RX5qMHDT-bzdC4--8MHnl-VlVo6w5U",
@@ -34,7 +33,6 @@ const firebaseConfig = {
 const app = initializeApp(firebaseConfig);
 export const auth = getAuth(app);
 export const db = getFirestore(app);
-export const storage = getStorage(app);
 export const provider = new GoogleAuthProvider();
 
 
@@ -129,7 +127,6 @@ if (newsForm) {
     
     const title = document.getElementById('newsTitle').value;
     const content = document.getElementById('newsContent').value;
-    const imageFile = document.getElementById('newsImage').files[0];
     
     if (!title || !content) {
       newsFormStatus.textContent = 'Title and content are required.';
@@ -139,20 +136,10 @@ if (newsForm) {
     newsFormStatus.textContent = 'Publishing...';
     
     try {
-      let imageUrl = null;
-      
-      // Upload image if provided
-      if (imageFile) {
-        const storageRef = ref(storage, `news-images/${Date.now()}_${imageFile.name}`);
-        const snapshot = await uploadBytes(storageRef, imageFile);
-        imageUrl = await getDownloadURL(snapshot.ref);
-      }
-      
-      // Create news document in Firestore
+      // Create news document in Firestore without storing images
       await addDoc(collection(db, 'news'), {
         title,
         content,
-        imageUrl,
         authorEmail: auth.currentUser.email,
         createdAt: serverTimestamp(),
         published: true
@@ -204,7 +191,6 @@ async function loadNews() {
         <p class="contentTitle">${escapeHtml(d.title || '')}</p>
         <p class="news-date">${escapeHtml(date)}</p>
         <div class="news-body">${escapeHtml(needsReadMore ? shortContent + '...' : (d.content || ''))}</div>
-        ${d.imageUrl ? `<div class="news-image"><img src="${d.imageUrl}" alt="${escapeHtml(d.title||'news image')}"></div>` : ''}
       `;
       if (needsReadMore) {
         const btn = document.createElement('button');
