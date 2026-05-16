@@ -40,24 +40,47 @@ figure {
     border-radius: 12px;
     object-fit: cover;
 }
+.hamburger { display: none; background: none; border: none; font-size: 1.5rem; cursor: pointer; color: #000; padding: 0.25rem 0.5rem; border-radius: 6px; }
+
+
 
 @media (max-width: 800px) {
-    .maincover {
+    .maincover { flex-direction: column; align-items: stretch; }
+    aside { flex-basis: auto; }
+    #map { flex-basis: auto; }
+    .flexby2{ flex-direction: column; align-items: stretch; }
+    header { flex-direction: column; align-items: flex-start; padding-left: 1%; padding-right: 1%; margin-bottom: 1%; position: sticky; }
+    #textlogo { font-size: 110%; margin-bottom: 0.5rem; text-align: center; width: 100%; }
+
+    /* center the hamburger in the header */
+    .hamburger{ display: block; position: absolute; left: 1.5rem; top: 50%; transform: translate(-50%, -50%); color: #000; background: #f8f8f8; border: 1px solid #ddd; z-index: 1101; }
+
+    /* hide nav by default on mobile; only show when .open present */
+    header nav { display: none; position: absolute; top: 100%; left: 0; width: 100%; flex-direction: column; background: white; border-top: 1px solid #000; gap: 0; z-index: 1000; }
+    header nav.open { display: flex; }
+    header nav a { padding: 1rem; border-bottom: 1px solid #eee; text-align: center; }
+}
+
+@media (max-width: 520px) {
+    header {
+        padding-top: 0.75%;
+        padding-bottom: 0.75%;
+    }
+    
+    #textlogo {
+        font-size: 100%;
+    }
+    
+    nav {
         flex-direction: column;
-        align-items: stretch;
+        width: 100%;
+        gap: 0.25rem;
     }
-
-    aside {
-        flex-basis: auto;
-    }
-
-    #map {
-        flex-basis: auto;
-    }
-
-    .flexby2{
-        flex-direction: column;
-        align-items: stretch;
+    
+    nav a {
+        padding: 0.5rem 0;
+        font-size: 85%;
+        flex: auto;
     }
 }
 
@@ -297,3 +320,4 @@ button {
     grid-template-columns: 1fr;
   }
 }
+

@@ -214,3 +214,21 @@ async function loadNews() {
 
 // run on pages that have the gallery
 loadNews();
+
+
+const menuToggle = document.getElementById('menuToggle');
+const navMenu = document.getElementById('navMenu');
+
+if (menuToggle && navMenu) {
+  menuToggle.addEventListener('click', () => {
+    navMenu.classList.toggle('open');
+  });
+
+  document.querySelectorAll('#navMenu a').forEach(link => {
+    link.addEventListener('click', () => {
+      navMenu.classList.remove('open');
+    });
+  });
+} else if (menuToggle) {
+  menuToggle.style.display = 'none';
+}
