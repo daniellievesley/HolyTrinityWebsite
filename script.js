@@ -19,7 +19,7 @@ function gotoCOFECSite() {
 
 import { initializeApp } from "https://www.gstatic.com/firebasejs/9.22.1/firebase-app.js";
 import { getAuth, getIdTokenResult, onAuthStateChanged, signInWithPopup, GoogleAuthProvider, signOut } from "https://www.gstatic.com/firebasejs/9.22.1/firebase-auth.js";
-import { getFirestore, collection, addDoc, serverTimestamp, query, where, getDocs, orderBy, updateDoc, doc } from "https://www.gstatic.com/firebasejs/9.22.1/firebase-firestore.js";
+import { getFirestore, collection, addDoc, serverTimestamp, query, where, getDocs, orderBy } from "https://www.gstatic.com/firebasejs/9.22.1/firebase-firestore.js";
 
 const firebaseConfig = {
   apiKey: "AIzaSyBK5RX5qMHDT-bzdC4--8MHnl-VlVo6w5U",
@@ -172,16 +172,40 @@ async function loadNews() {
   if (!container) return;
   container.innerHTML = '';
 
+  // Primary query uses published + createdAt ordering. If the composite index is
+  // missing, fall back to a simpler query and filter client-side.
+  async function fetchNewsWithFallback() {
+    const primaryQuery = query(
+      collection(db, 'news'),
+      where('published', '==', true),
+      orderBy('createdAt', 'desc')
+    );
+
+    try {
+      return await getDocs(primaryQuery);
+    } catch (err) {
+      const msg = String(err?.message || '').toLowerCase();
+      const isMissingIndex = msg.includes('index') && (msg.includes('create') || msg.includes('requires'));
+      if (!isMissingIndex) throw err;
+
+      console.warn('Primary news query needs a Firestore index. Using fallback query.', err);
+      const fallbackQuery = query(collection(db, 'news'), orderBy('createdAt', 'desc'));
+      return await getDocs(fallbackQuery);
+    }
+  }
+
   try {
-    const q = query(collection(db, 'news'), where('published','==', true), orderBy('createdAt','desc'));
-    const snap = await getDocs(q);
-    if (snap.empty) {
+    const snap = await fetchNewsWithFallback();
+    const docs = snap.docs
+      .map(d => ({ id: d.id, ...d.data() }))
+      .filter(d => d.published === true);
+
+    if (docs.length === 0) {
       container.innerHTML = '<p>No news yet.</p>';
       return;
     }
 
-    snap.forEach(doc => {
-      const d = doc.data();
+    docs.forEach(d => {
       const date = d.createdAt && d.createdAt.toDate ? d.createdAt.toDate().toLocaleDateString() : '';
       const section = document.createElement('section');
       section.className = 'news-item';
@@ -208,6 +232,10 @@ async function loadNews() {
     });
   } catch (err) {
     console.error('loadNews error', err);
+    if (String(err?.code || '').includes('permission-denied')) {
+      container.innerHTML = '<p>Error loading news: Firestore rules denied read access.</p>';
+      return;
+    }
     container.innerHTML = '<p>Error loading news.</p>';
   }
 }
